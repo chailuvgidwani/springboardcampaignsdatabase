@@ -1,9 +1,11 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { Search, Eye, ChevronDown, ChevronUp, Upload } from 'lucide-react';
+import { Search, Eye, ChevronDown, ChevronUp } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import CSVImport from './CSVImport';
+
+
 
 // Define our TypeScript interfaces
 interface Race {
@@ -74,7 +76,7 @@ const RaceDatabase = () => {
       const { error } = await supabase
         .from('races')
         .insert(importedRaces);
-
+  
       if (error) throw error;
       
       // Refresh the races list
@@ -104,13 +106,6 @@ const RaceDatabase = () => {
     <div className="p-6 max-w-7xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Race Database</h1>
-        <button
-          onClick={() => setShowImport(true)}
-          className="px-4 py-2 bg-blue-600 text-white rounded flex items-center gap-2"
-        >
-          <Upload size={20} />
-          Import CSV
-        </button>
       </div>
 
       <div className="mb-6 relative">
@@ -123,6 +118,27 @@ const RaceDatabase = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
+<div className="flex justify-between items-center mb-6">
+  <h1 className="text-2xl font-bold">Race Database</h1>
+  <button
+    onClick={() => setShowImport(true)}
+    className="px-4 py-2 bg-blue-600 text-white rounded flex items-center gap-2"
+  >
+    <Upload size={20} />
+    Import CSV
+  </button>
+</div>
+
+<div className="flex justify-between items-center mb-6">
+  <h1 className="text-2xl font-bold">Race Database</h1>
+  <button
+    onClick={() => setShowImport(true)}
+    className="px-4 py-2 bg-blue-600 text-white rounded flex items-center gap-2"
+  >
+    <Upload size={20} />
+    Import CSV
+  </button>
+</div>
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
@@ -163,11 +179,11 @@ const RaceDatabase = () => {
         </table>
       </div>
       {showImport && (
-        <CSVImport
-          onImport={handleImport}
-          onClose={() => setShowImport(false)}
-        />
-      )}
+  <CSVImport
+    onImport={handleImport}
+    onClose={() => setShowImport(false)}
+  />
+)}
     </div>
   );
 };
