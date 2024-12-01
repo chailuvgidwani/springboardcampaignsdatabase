@@ -30,11 +30,11 @@ const RaceEditModal = ({ race, onSave, onClose }: RaceEditModalProps) => {
     notes: race.notes || ''
   });
 
-  const handleChange = (field: string, value: string | number) => {
-    const numValue = field !== 'notes' ? parseFloat(value as string) || 0 : value;
+  const handleChange = (fieldPath: string, value: string | number) => {
+    const numValue = fieldPath !== 'notes' ? parseFloat(value as string) || 0 : value;
     
-    if (field.includes('.')) {
-      const [section, subsection, field] = field.split('.');
+    if (fieldPath.includes('.')) {
+      const [section, subsection, field] = fieldPath.split('.') as [string, string, string];
       setFormData(prev => ({
         ...prev,
         [section]: {
@@ -48,7 +48,7 @@ const RaceEditModal = ({ race, onSave, onClose }: RaceEditModalProps) => {
     } else {
       setFormData(prev => ({
         ...prev,
-        [field]: numValue
+        [fieldPath]: numValue
       }));
     }
   };
