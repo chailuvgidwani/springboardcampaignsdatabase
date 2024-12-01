@@ -395,24 +395,42 @@ const RaceDatabase = () => {
   };
 
   // Filtering and sorting logic
+  // Replace the filteredRaces sorting section in RaceDatabase.tsx with this:
+
+  // Helper function for safe nested property access
+  const getNestedValue = (obj: Race, path: string) => {
+    return path.split('.').reduce((prev, curr) => {
+      return prev && typeof prev === 'object' ? prev[curr as keyof typeof prev] : prev;
+    }, obj as any) as number | string;
+  };
+
+  // Filtering and sorting logic
   const filteredRaces = races
     .filter(race =>
       (race.state + race.district).toLowerCase().includes(searchTerm.toLowerCase())
     )
     .sort((a, b) => {
-      let aValue = a[sortField];
-      let bValue = b[sortField];
+      let aValue: string | number;
+      let bValue: string | number;
       
-      // Handle nested properties
       if (sortField.includes('.')) {
-        const parts = sortField.split('.');
-        aValue = parts.reduce((obj, key) => obj?.[key], a);
-        bValue = parts.reduce((obj, key) => obj?.[key], b);
+        aValue = getNestedValue(a, sortField);
+        bValue = getNestedValue(b, sortField);
+      } else {
+        aValue = a[sortField];
+        bValue = b[sortField];
       }
       
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+      }
+      
+      // Convert to strings for string comparison
+      const aString = String(aValue || '');
+      const bString = String(bValue || '');
       return sortDirection === 'asc'
-        ? (aValue > bValue ? 1 : -1)
-        : (bValue > aValue ? 1 : -1);
+        ? aString.localeCompare(bString)
+        : bString.localeCompare(aString);
     });
 
     // Auth check
