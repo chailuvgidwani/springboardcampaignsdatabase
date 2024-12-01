@@ -356,7 +356,7 @@ const RaceDatabase = () => {
     try {
       console.log('Attempting to insert data:', importedRaces);
       
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('races')
         .insert(importedRaces)
         .select();
@@ -379,7 +379,7 @@ const RaceDatabase = () => {
       if (newData) {
         setRaces(newData);
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Import error:', error);
     }
   };
