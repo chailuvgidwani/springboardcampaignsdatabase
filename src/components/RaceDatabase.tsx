@@ -398,10 +398,12 @@ const RaceDatabase = () => {
   // Replace the filteredRaces sorting section in RaceDatabase.tsx with this:
 
   // Helper function for safe nested property access
+  // Helper function for safe nested property access
   const getNestedValue = (obj: Race, path: string) => {
     return path.split('.').reduce((prev, curr) => {
-      return prev && typeof prev === 'object' ? prev[curr as keyof typeof prev] : prev;
-    }, obj as any) as number | string;
+      if (!prev || typeof prev !== 'object') return '';
+      return (prev as Record<string, any>)[curr];
+    }, obj as Record<string, unknown>) as number | string;
   };
 
   // Filtering and sorting logic
