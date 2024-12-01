@@ -34,6 +34,11 @@ const RaceActions = ({ race, onUpdate, onDelete }: RaceActionsProps) => {
   };
 
   const handleDelete = async () => {
+    if (!race.id) {
+      console.error('Cannot delete race without id');
+      return;
+    }
+
     if (!isDeleting) {
       setIsDeleting(true);
       return;
