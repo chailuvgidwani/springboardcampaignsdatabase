@@ -3,8 +3,10 @@
 import React, { useState } from 'react';
 import { Upload, X, Check, AlertCircle, Download } from 'lucide-react';
 
+import { Race } from '@/types';
+
 interface Props {
-  onImport: (data: any) => void;
+  onImport: (data: Race[]) => Promise<void>;
   onClose: () => void;
 }
 

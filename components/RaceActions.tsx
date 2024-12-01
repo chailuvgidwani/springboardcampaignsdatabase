@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Pencil, Trash2, X, Save } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
+import { Race } from '@/types';
 import { supabase } from '@/lib/supabase';
-import { Race } from './RaceDatabase';
 import RaceEditModal from './RaceEditModal';
 
 interface RaceActionsProps {

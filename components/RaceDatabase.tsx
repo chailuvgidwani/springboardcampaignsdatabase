@@ -1,7 +1,8 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { Search, Eye, ChevronDown, ChevronUp, Upload, Filter } from 'lucide-react';
+import { Search, Eye, ChevronDown, ChevronUp, Upload } from 'lucide-react';
+import { Race } from '@/types';
 import { supabase } from '@/lib/supabase';
 import CSVImport from './CSVImport';
 import AuthComponent from './Auth';
@@ -10,45 +11,6 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { X } from 'lucide-react'
 import RaceActions from './RaceActions';
 
-
-// Expanded TypeScript interface with all our fields
-interface Race {
-  id: number;
-  state: string;
-  district: string;
-  dem_performance: number;
-  isDemTrending?: boolean;
-  voter_registration: {
-    current: {
-      dem: number;
-      rep: number;
-      ind: number;
-    };
-    trend?: Array<{
-      year: number;
-      dem: number;
-      rep: number;
-      ind: number;
-    }>;
-  };
-  fundraising: {
-    individual: number;
-    party: number;
-    labor: number;
-    issueOrgs: number;
-    pac: number;
-    total: number;
-  };
-  demographics: {
-    collegeEducation: number;
-    medianIncome: number;
-  };
-  historicalResults?: Array<{
-    year: number;
-    result: number;
-  }>;
-  notes?: string;
-}
 
 // Add this after your Race interface but before the main RaceDatabase component
 // Updated DistrictDetails component for RaceDatabase.tsx
@@ -390,7 +352,7 @@ const RaceDatabase = () => {
   };
 
   // Import handler
-  const handleImport = async (importedRaces) => {
+  const handleImport = async (importedRaces: Race[]) => {
     try {
       console.log('Attempting to insert data:', importedRaces);
       
