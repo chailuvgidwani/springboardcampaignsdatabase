@@ -399,16 +399,14 @@ const RaceDatabase = () => {
 
   // Helper function for safe nested property access
   // Helper function for safe nested property access
-  type NestedObject = {
-    [key: string]: string | number | boolean | NestedObject | undefined;
-  };
+
   
   // At the top of RaceDatabase.tsx, add this comment to disable the ESLint rule
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // Then update the getNestedValue function
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const getNestedValue = (obj: Race, path: string) => {
-  // Using Record<string, any> is necessary for dynamic property access
   const value = path.split('.').reduce((prev, curr) => {
     if (!prev || typeof prev !== 'object') return undefined;
     return (prev as Record<string, any>)[curr];
@@ -416,7 +414,7 @@ const getNestedValue = (obj: Race, path: string) => {
   
   return typeof value === 'string' || typeof value === 'number' ? value : '';
 };
-
+/* eslint-enable @typescript-eslint/no-explicit-any */
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
   // Filtering and sorting logic
