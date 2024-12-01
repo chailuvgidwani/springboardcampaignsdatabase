@@ -400,40 +400,34 @@ const RaceDatabase = () => {
   // Helper function for safe nested property access
   // Helper function for safe nested property access
   const getNestedValue = (obj: Race, path: string) => {
-    return path.split('.').reduce((prev, curr) => {
-      if (!prev || typeof prev !== 'object') return '';
-      return (prev as Record<string, any>)[curr];
-    }, obj as Record<string, unknown>) as number | string;
+    const value = path.split('.').reduce((prev: any, curr: string) => {
+      if (!prev || typeof prev !== 'object') return undefined;
+      return prev[curr];
+    }, obj);
+    
+    return typeof value === 'string' || typeof value === 'number' ? value : '';
   };
 
   // Filtering and sorting logic
   const filteredRaces = races
-    .filter(race =>
-      (race.state + race.district).toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .sort((a, b) => {
-      let aValue: string | number;
-      let bValue: string | number;
-      
-      if (sortField.includes('.')) {
-        aValue = getNestedValue(a, sortField);
-        bValue = getNestedValue(b, sortField);
-      } else {
-        aValue = a[sortField];
-        bValue = b[sortField];
-      }
-      
-      if (typeof aValue === 'number' && typeof bValue === 'number') {
-        return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
-      }
-      
-      // Convert to strings for string comparison
-      const aString = String(aValue || '');
-      const bString = String(bValue || '');
-      return sortDirection === 'asc'
-        ? aString.localeCompare(bString)
-        : bString.localeCompare(aString);
-    });
+  .filter(race =>
+    (race.state + race.district).toLowerCase().includes(searchTerm.toLowerCase())
+  )
+  .sort((a, b) => {
+    const aValue = getNestedValue(a, sortField);
+    const bValue = getNestedValue(b, sortField);
+    
+    if (typeof aValue === 'number' && typeof bValue === 'number') {
+      return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+    }
+    
+    const aString = String(aValue || '');
+    const bString = String(bValue || '');
+    
+    return sortDirection === 'asc'
+      ? aString.localeCompare(bString)
+      : bString.localeCompare(aString);
+  });
 
     // Auth check
   if (!session) {
