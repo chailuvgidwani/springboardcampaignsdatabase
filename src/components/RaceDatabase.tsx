@@ -400,7 +400,7 @@ const RaceDatabase = () => {
   // Helper function for safe nested property access
   // Helper function for safe nested property access
   const getNestedValue = (obj: Race, path: string) => {
-    const value = path.split('.').reduce((prev: any, curr: string) => {
+    const value = path.split('.').reduce((prev: unknown, curr: string) => {
       if (!prev || typeof prev !== 'object') return undefined;
       return prev[curr];
     }, obj);
