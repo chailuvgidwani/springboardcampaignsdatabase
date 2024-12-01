@@ -17,6 +17,13 @@ import RaceActions from './RaceActions';
 
 // Updated DistrictDetails component for RaceDatabase.tsx
 
+type NestedKeyOf<ObjectType extends object> = {
+  [Key in keyof ObjectType & (string | number)]: ObjectType[Key] extends object
+    ? `${Key}` | `${Key}.${NestedKeyOf<ObjectType[Key]>}`
+    : `${Key}`;
+}[keyof ObjectType & (string | number)];
+
+
 const DistrictDetails = ({ race, onClose }: { race: Race; onClose: () => void }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const chartColors = {
@@ -302,7 +309,7 @@ const RaceDatabase = () => {
   const [races, setRaces] = useState<Race[]>([]);
   const [selectedRace, setSelectedRace] = useState<Race | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortField, setSortField] = useState<keyof Race>('state');
+  const [sortField, setSortField] = useState<NestedKeyOf<Race>>('state');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [showImport, setShowImport] = useState(false);
 
@@ -342,7 +349,7 @@ const RaceDatabase = () => {
   }, []);
 
   // Sorting helper
-  const handleSort = (field: keyof Race) => {
+  const handleSort = (field: NestedKeyOf<Race>) => {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
