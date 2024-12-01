@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
-import { Race } from './RaceDatabase';
+import { Race } from '@/types';
 
 interface RaceEditModalProps {
     race: Race;
