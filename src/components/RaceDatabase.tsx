@@ -454,7 +454,7 @@ const getNestedValue = (obj: Race, path: string) => {
     <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Race Database</h1>
+        <h1 className="text-2xl font-bold text-gray-900 hover:text-black">Race Database</h1>
         <button
           onClick={() => setShowImport(true)}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded flex items-center gap-2"
