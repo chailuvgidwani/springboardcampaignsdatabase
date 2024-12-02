@@ -3,13 +3,35 @@ import { X } from 'lucide-react';
 import { Race } from '@/types';
 
 interface RaceEditModalProps {
-    race: Race;
-    onSave: (updatedRace: Race) => void;
-    onClose: () => void;
-  }
+  race: Race;
+  onSave: (updatedRace: Race) => void;
+  onClose: () => void;
+}
+
+// Define form data structure to match nested properties
+type FormData = {
+  state: string;
+  district: string;
+  dem_performance: number;
+  voter_registration: {
+    current: {
+      dem: number;
+      rep: number;
+      ind: number;
+    };
+  };
+  fundraising: {
+    individual: number;
+    party: number;
+    labor: number;
+    issueOrgs: number;
+    pac: number;
+  };
+  notes: string;
+};
 
 const RaceEditModal = ({ race, onSave, onClose }: RaceEditModalProps) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     state: race.state,
     district: race.district,
     dem_performance: race.dem_performance,
@@ -30,33 +52,51 @@ const RaceEditModal = ({ race, onSave, onClose }: RaceEditModalProps) => {
     notes: race.notes || ''
   });
 
+  // Type-safe update function
   const handleChange = (fieldPath: string, value: string | number) => {
     const numValue = fieldPath !== 'notes' ? parseFloat(value as string) || 0 : value;
     
-    if (fieldPath.includes('.')) {
-      const [section, subsection, field] = fieldPath.split('.') as [string, string, string];
-      setFormData(prev => ({
-        ...prev,
-        [section]: {
-          ...prev[section],
-          [subsection]: {
-            ...prev[section][subsection],
-            [field]: numValue
-          }
+    setFormData(prev => {
+      const newFormData = { ...prev };
+      
+      if (fieldPath.includes('.')) {
+        const [section, subsection, field] = fieldPath.split('.') as [keyof FormData, string, string];
+        
+        if (section === 'voter_registration' && subsection === 'current') {
+          return {
+            ...prev,
+            voter_registration: {
+              ...prev.voter_registration,
+              current: {
+                ...prev.voter_registration.current,
+                [field]: numValue
+              }
+            }
+          };
         }
-      }));
-    } else {
-      setFormData(prev => ({
+        
+        if (section === 'fundraising') {
+          return {
+            ...prev,
+            fundraising: {
+              ...prev.fundraising,
+              [field]: numValue
+            }
+          };
+        }
+      }
+      
+      // Handle top-level fields
+      return {
         ...prev,
         [fieldPath]: numValue
-      }));
-    }
+      };
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Calculate total fundraising
     const totalFundraising = 
       formData.fundraising.individual +
       formData.fundraising.party +
@@ -64,7 +104,6 @@ const RaceEditModal = ({ race, onSave, onClose }: RaceEditModalProps) => {
       formData.fundraising.issueOrgs +
       formData.fundraising.pac;
 
-    // Preserve historical data while updating current values
     const updatedRace = {
       ...race,
       ...formData,
@@ -78,6 +117,7 @@ const RaceEditModal = ({ race, onSave, onClose }: RaceEditModalProps) => {
     onSave(updatedRace);
   };
 
+  // Rest of the component remains the same
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
