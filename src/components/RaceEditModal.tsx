@@ -56,9 +56,7 @@ const RaceEditModal = ({ race, onSave, onClose }: RaceEditModalProps) => {
   const handleChange = (fieldPath: string, value: string | number) => {
     const numValue = fieldPath !== 'notes' ? parseFloat(value as string) || 0 : value;
     
-    setFormData(prev => {
-      const newFormData = { ...prev };
-      
+    setFormData(prev => {      
       if (fieldPath.includes('.')) {
         const [section, subsection, field] = fieldPath.split('.') as [keyof FormData, string, string];
         
