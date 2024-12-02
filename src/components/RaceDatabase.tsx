@@ -536,8 +536,8 @@ const getNestedValue = (obj: Race, path: string) => {
         )}
       </button>
     </th>
-    <th className="p-2 border text-center">Details</th>
-    <th className="p-2 border text-center">Actions</th>
+    <th className="p-2 border text-center text-gray-900 hover:text-black">Details</th>
+    <th className="p-2 border text-center text-gray-900 hover:text-black">Actions</th>
   </tr>
 </thead>
           <tbody>
